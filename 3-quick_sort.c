@@ -1,72 +1,74 @@
 #include "sort.h"
-
+#include <stdio.h>
 /**
- * partition_array - partitions an array
- * @array: array of integers
- * @low: the lowest position of array
- * @high: highest position of the array to be partitioned
- * @size: length of the main array
- * Return: new pivot index
- */
-int partition_array(int *array, int low, int high, size_t size)
-{
-	int i = (low - 1);
-	int pivot = array[high];
-	int j, tmp;
-
-	for (j = low; j < high; j++)
-	{
-		if (array[j] < pivot)
-		{
-			i++;
-			tmp = array[j];
-			array[j] = array[i];
-			array[i] = tmp;
-			if (i != j)
-				print_array(array, size);
-		}
-	}
-
-	if (array[i + 1] != array[high])
-	{
-		tmp = array[i + 1];
-		array[i + 1] = array[high];
-		array[high] = tmp;
-		if ((i + 1) != j)
-			print_array(array, size);
-	}
-
-	return (i + 1);
-}
-
-/**
- * quicksort - sorts an array recursively using quicksort
- * @array: array of integers
- * @low: the lowest position of array
- * @high: highest position of the array to be partitioned
- * @size: length of the main array
- * Returns: nothing
- */
-void quicksort(int *array, int low, int high, size_t size)
-{
-	int pivot = 0;
-
-	if (low < high)
-	{
-		pivot = partition_array(array, low, high, size);
-		quicksort(array, low, pivot - 1, size);
-		quicksort(array, (pivot + 1), high, size);
-	}
-}
-
-/**
- * quick_sort - base of the quicksort algorithm that
- * initializes it's implementaion
- * @array: array of integers
- * @size: length of the main array
- */
+ * quick_sort - sorts an array of integers in ascending order
+ * using the quick sort sort algorithm
+ * @array: pointer to the array
+ * @size: size of the array
+*/
 void quick_sort(int *array, size_t size)
 {
-	if (array || size > 1)
-		quicksort(array, 0, (size - 1), size);
+recursive_quick_sort(array, size, 0, size - 1);
+}
+
+/**
+ * recursive_quick_sort - recursive part
+ * @array: array to use
+ * @size: size
+ * @start: start index
+ * @end: end index
+*/
+void recursive_quick_sort(int *array, size_t size, int start, int end)
+{
+int p;
+if (start < end)
+{
+	p = partition(array, size, start, end);
+
+	recursive_quick_sort(array, size, start, p - 1);
+	recursive_quick_sort(array, size, p + 1, end);
+}
+
+}
+
+/**
+ * partition - partition the array
+ * @array: array to use
+ * @size: size
+ * @start: start index
+ * @end: end index
+ * Return: partition index
+*/
+size_t partition(int *array, size_t size, int start, int end)
+{
+int pivot = array[end];
+int i = start - 1;
+int j;
+
+for (j = start; j <= end - 1; j++)
+{
+	if (array[j] < pivot)
+	{
+		i++;
+		swap_int1(array, i, j);
+		print_array(array, size);
+	}
+}
+swap_int1(array, i + 1, end);
+print_array(array, size);
+return (i+1);
+}
+
+/**
+ * swap_int1 - swap variable values
+ * @array: array to use
+ * @a: index 1
+ * @b: index 2
+*/
+void swap_int1(int *array, int a, int b)
+{
+int tmp;
+tmp = array[a];
+array[a] = array[b];
+array[b] = tmp;
 }
